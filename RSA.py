@@ -7,6 +7,11 @@ def main():
 
 def generate_keys(first_prime, second_prime):
     modulus = first_prime * second_prime
+    q = (first_prime - 1) * (second_prime - 1)
+    encrypt_key = random.randrange(2, q-1)
+    while q % encrypt_key != 0:
+        encrypt_key = random.randrange(2, q-1)
+
 
 def generate_prime():
     #Get 2 distinct prime numbers from the prime number list
