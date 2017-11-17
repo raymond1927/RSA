@@ -3,22 +3,42 @@
 
 def main():
     print("HELLO WORLD")
+    while True:
+        pass
     first_prime, second_prime = generate_prime()
     public_key, private_key = generate_keys(first_prime, second_prime)
     print(public_key, private_key)
     message = input("Message to encrypt: ")
     print(message)
-    encrypt_message(private_key, message)
-
-def encrypt_message(private_key, message):
-    #for i in message:
-    encrypt_key, modulus = private_key
     print([ord(c) for c in message])
     message_ascii = [ord(c) for c in message]
+    encrypted_message = encrypt_message(private_key, message_ascii)
+    print(encrypted_message)
+    decrypted_message = decrypt_message(public_key, encrypted_message)
+    print(decrypted_message)
+    print_ascii(decrypted_message)
+
+
+
+def print_ascii(message):
+    for i in message:
+        print(chr(i), end = '')
+    print("")
+
+def decrypt_message(public_key, message):
+    decrypt_key, modulus = public_key
+    decrypted_message = []
+    for i in message:
+        decrypted_message.append(mod_exponential(i,decrypt_key,modulus))
+    return decrypted_message
+
+#Encrypt_message takes the private_key tuple and the message already converted into ascii
+def encrypt_message(private_key, message):
+    encrypt_key, modulus = private_key
     encrypted_message = []
-    for i in message_ascii:
-        #encrypted_message.append(math.pow(i,encrypt_key) % modulus)
-        pass
+    for i in message:
+        encrypted_message.append(mod_exponential(i,encrypt_key,modulus))
+    return encrypted_message
 
 def mod_exponential(num, power, mod):
     """
@@ -30,6 +50,8 @@ def mod_exponential(num, power, mod):
     1
     >>> mod_exponential(2013,1081,100)
     13
+    >>> mod_exponential(2015,1082,11)
+    4
     """
     pow_remainder = {}
     pow_remainder[0] = 1
@@ -69,6 +91,8 @@ def mod_exponential_2(num, power, mod):
     1
     >>> mod_exponential(2013,1081,100)
     13
+    >>> mod_exponential(2015,1082,11)
+    4
     """
     #This one doesn't do anything special just calculates the mod of and exponential
     remainder = num % mod
