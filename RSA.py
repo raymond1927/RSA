@@ -4,14 +4,48 @@
 def main():
     print("HELLO WORLD")
     first_prime, second_prime = generate_prime()
+    generate_keys(first_prime, second_prime)
 
 def generate_keys(first_prime, second_prime):
     modulus = first_prime * second_prime
     q = (first_prime - 1) * (second_prime - 1)
-    encrypt_key = random.randrange(2, q-1)
-    while q % encrypt_key != 0:
+    while True:
         encrypt_key = random.randrange(2, q-1)
+        if relative_coprime_check(encrypt_key, q) == True:
+            break
 
+    decrypt_key = 2
+    for decrypt_key in range(2, encrypt_key-1):
+        if decrypt_key * encrypt_key % q == 1:
+            break
+    print(first_prime, second_prime, q)
+    print(modulus, encrypt_key, decrypt_key)
+    encryption_key = [encrypt_key, modulus]
+    decryption_key = [decrypt_key, modulus]
+    return encryption_key, decryption_key
+
+def relative_coprime_check(first, second):
+    """
+    >>> relative_coprime_check(5,4)
+    True
+    >>> relative_coprime_check(6,8)
+    False
+    >>> relative_coprime_check(27,21)
+    False
+    >>> relative_coprime_check(11,6)
+    True
+    >>> relative_coprime_check(523776, 267849)
+    False
+    """
+    if first > second:
+        size = second
+    else:
+        size = first
+    for i in range(2,size):
+        if first % i == 0 and second % i == 0:
+            #These two numbers are not relatively coprime
+            return False
+    return True
 
 def generate_prime():
     #Get 2 distinct prime numbers from the prime number list
