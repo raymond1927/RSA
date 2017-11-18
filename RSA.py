@@ -3,8 +3,10 @@
 
 def main():
     print("Type help for instructions")
+    public_key = [None]
+    private_key = [None]
     while True:
-        interface()
+        public_key, private_key = interface(public_key, private_key)
     first_prime, second_prime = generate_prime()
     public_key, private_key = generate_keys(first_prime, second_prime)
     print(public_key, private_key)
@@ -18,20 +20,49 @@ def main():
     print(decrypted_message)
     print_ascii(decrypted_message)
 
-def interface():
+def save_keys(public_key, private_key):
+    for i in range(len(public_key)):
+        try:
+            if i < 2:
+                print("Not valid public key")
+            else:
+                print("Saving public key")
+        except:
+            print("Not valid public key")
+
+
+def print_keys(public_key, private_key):
+    print("Public key is:", public_key)
+    print("Private key is:", private_key)
+
+def generate_key_pair():
+    first_prime, second_prime = generate_prime()
+    public_key, private_key = generate_keys(first_prime, second_prime)
+    print("Public key is:", public_key)
+    print("Private key is:", private_key)
+    return public_key, private_key
+
+def help():
+    print(
+"""\tInstruction\t\tDescription
+\tgenerate keys\t\tgenerate a public and private key pair
+\tsave key\t\tsave the generate key into file in same directory
+\tread key\t\tread private key from file
+\tencrypt message\t\tenter message to be encrypted by private key
+\tdecrypt message\t\tenter message to be decrypted by public key
+\tInstruction\t\tDescription
+\texit\t\t\texit program""")
+
+def interface(public_key, private_key):
     function = input("> ").lower()
     if function == "help":
-        print("Instruction\t\tDescription")
-        print("generate key\t\tgenerate a public and private key pair")
-        print("save key\t\tsave the generate key into file in same directory")
-        print("read key\t\tread private key from file")
-        print("encrypt message\t\tenter message to be encrypted by private key")
-        print("decrypt message\t\tenter message to be decrypted by public key")
-        print("Instruction\t\tDescription")
-        print("exit\t\t\texit program")
-    elif function == "generate key":
-        print("generating key")
-    elif function == "save key":
+        help()
+    elif function == "generate keys":
+        public_key, private_key = generate_key_pair()
+        return public_key, private_key
+    elif function == "print keys":
+        print_keys(public_key, private_key)
+    elif function == "save keys":
         print("saving key")
     elif function == "read key":
         print("reading key")
@@ -41,6 +72,9 @@ def interface():
         pass
     elif function == "exit":
         sys.exit()
+    else:
+        print(function, "command not found")
+    return public_key, private_key
 
 def print_ascii(message):
     for i in message:
@@ -135,8 +169,6 @@ def generate_keys(first_prime, second_prime):
     for decrypt_key in range(2, encrypt_key-1):
         if decrypt_key * encrypt_key % q == 1:
             break
-    print(first_prime, second_prime, q)
-    print(modulus, encrypt_key, decrypt_key)
     public_key = [encrypt_key, modulus]
     private_key = [decrypt_key, modulus]
     return public_key, private_key
