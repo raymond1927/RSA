@@ -21,15 +21,40 @@ def main():
     print_ascii(decrypted_message)
 
 def save_keys(public_key, private_key):
+    valid_public_key = True
+    valid_private_key = True
     for i in range(len(public_key)):
         try:
-            if i < 2:
-                print("Not valid public key")
-            else:
-                print("Saving public key")
+            if public_key[i] < 2:
+                print("Not valid public key: ", public_key)
+                valid_public_key = False
         except:
-            print("Not valid public key")
+            print("Not valid public key: ", public_key)
+            valid_public_key = False
 
+    if len(public_key) != 2 or len(private_key) != 2:
+        valid_public_key = False
+        valid_private_key = False
+
+    for i in range(len(private_key)):
+        try:
+            if private_key[i] < 2:
+                print("Not valid private key: ", private_key)
+                valid_private_key = False
+        except:
+            print("Not valid private key: ", private_key)
+            valid_private_key = False
+
+    if valid_public_key == True and valid_private_key == True:
+        public_key_str = str(public_key[0]) + " " + str(public_key[1])
+        with open("public_key",'w') as f:
+            f.write(public_key_str)
+        f.close()
+
+        private_key_str = str(private_key[0]) + " " + str(private_key[1])
+        with open("private_key",'w') as f:
+            f.write(private_key_str)
+        f.close()
 
 def print_keys(public_key, private_key):
     print("Public key is:", public_key)
@@ -63,7 +88,7 @@ def interface(public_key, private_key):
     elif function == "print keys":
         print_keys(public_key, private_key)
     elif function == "save keys":
-        print("saving key")
+        save_keys(public_key, private_key)
     elif function == "read key":
         print("reading key")
     elif function == "encrypt message":
