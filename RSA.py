@@ -20,6 +20,36 @@ def main():
     print(decrypted_message)
     print_ascii(decrypted_message)
 
+def load_private_key():
+    try:
+        with open("private_key") as f:
+            private_key = f.read()
+        f.close()
+        str_list = private_key.split()
+        new_private_key = []
+        for i in range(len(str_list)):
+            key = int(str_list[i])
+            new_private_key.append(key)
+        return(new_private_key)
+    except:
+        print("Cannot find private_key")
+        return([None])
+
+def load_public_key():
+    try:
+        with open("public_key") as f:
+            public_key = f.read()
+        f.close()
+        str_list = public_key.split()
+        new_public_key = []
+        for i in range(len(str_list)):
+            key = int(str_list[i])
+            new_public_key.append(key)
+        return(new_public_key)
+    except:
+        print("Cannot find public_key")
+        return([None])
+
 def save_keys(public_key, private_key):
     valid_public_key = True
     valid_private_key = True
@@ -31,11 +61,9 @@ def save_keys(public_key, private_key):
         except:
             print("Not valid public key: ", public_key)
             valid_public_key = False
-
     if len(public_key) != 2 or len(private_key) != 2:
         valid_public_key = False
         valid_private_key = False
-
     for i in range(len(private_key)):
         try:
             if private_key[i] < 2:
@@ -44,7 +72,6 @@ def save_keys(public_key, private_key):
         except:
             print("Not valid private key: ", private_key)
             valid_private_key = False
-
     if valid_public_key == True and valid_private_key == True:
         public_key_str = str(public_key[0]) + " " + str(public_key[1])
         with open("public_key",'w') as f:
@@ -89,8 +116,10 @@ def interface(public_key, private_key):
         print_keys(public_key, private_key)
     elif function == "save keys":
         save_keys(public_key, private_key)
-    elif function == "read key":
-        print("reading key")
+    elif function == "load public key":
+        public_key = load_public_key()
+    elif function == "load private key":
+        private_key = load_private_key()
     elif function == "encrypt message":
         pass
     elif function == "decrypt message":
