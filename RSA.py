@@ -98,8 +98,10 @@ def help():
     print(
 """\tInstruction\t\tDescription
 \tgenerate keys\t\tgenerate a public and private key pair
-\tsave key\t\tsave the generate key into file in same directory
-\tread key\t\tread private key from file
+\tprint keys\t\tprint current key pair
+\tsave keys\t\tsave the generate key into file in same directory
+\tload public key\t\tread public key from file
+\tload private key\t\tread private key from file
 \tencrypt message\t\tenter message to be encrypted by private key
 \tdecrypt message\t\tenter message to be decrypted by public key
 \tInstruction\t\tDescription
